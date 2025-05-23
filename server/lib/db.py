@@ -41,7 +41,7 @@ class Db:
                 host=self._ip, port=self._pt,
                 dbname=self._nm,
                 user=self._us, password=self._pw,
-                row_factory=dict_row
+                row_factory=dict_row # type: ignore
             )
             self._cur = self._con.cursor()
             result = True
@@ -59,8 +59,6 @@ class Db:
         return result
 
     def disconnect(self: Self) -> None:
-        if self._con is None or self._cur is None:
-            return
 
         if self._cur is not None:
             self._cur.close()
@@ -77,11 +75,13 @@ class Db:
         if self._cur is None:
             return False
 
-        result: TableType = []
+        result: Union[Literal[False], TableType] = False
 
         try:
-            self._cur.execute(sql)
-            rows: list[dict[str, Any]] = self._cur.fetchall()
+            self._cur.execute(sql) # type: ignore
+            rows: list[dict[str, Any]] = self._cur.fetchall() # type: ignore
+            print(rows)
+            result = []
             for row in rows:
                 add_record: RecordType = {}
                 for col_name in row.keys():
@@ -101,7 +101,7 @@ class Db:
 
         result: bool = False
         try:
-            self._cur.execute(sql)
+            self._cur.execute(sql) # type: ignore
             result = True
 
         except Exception as e:

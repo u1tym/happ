@@ -6,6 +6,8 @@ alter role mdausr with password 'MEDIAMEDIA';
 create database mdadb encoding 'UTF8' owner mdausr;
 
 -- mdausr
+psql -h 127.0.0.1 -p 5432 -d mdadb -U mdausr
+
 create table person (
     pid      char(8)  primary key,
     pname    text     not null
@@ -40,6 +42,9 @@ create table mda_rec (
     release date      not null,
     own     boolean   not null default false,
 
+    code    text      not null default '',
+    note    text      not null default '',
+    
     udate   TIMESTAMP default CURRENT_TIMESTAMP,
     delflg  boolean   not null default false,
 

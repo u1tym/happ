@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./server/lib"
+    ],
+    "python.languageServer": "Pylance",
+    "python.analysis.typeCheckingMode": "strict"
+}

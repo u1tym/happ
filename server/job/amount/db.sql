@@ -5,7 +5,10 @@ alter role amtusr with password 'AMTAMT';
 
 create database amtdb encoding 'UTF8' owner amtusr;
 
+
 -- amtusr
+psql -h 127.0.0.1 -p 5432 -d amtdb -U amtusr
+
 create table pln_rec (
     pid     char(8)   primary key,
 
