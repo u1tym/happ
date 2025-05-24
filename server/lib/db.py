@@ -20,10 +20,12 @@ RecordType = dict[str, Union[str, int, float, bool, None]]
 TableType = list[RecordType]
 
 class Db:
+    _con: Optional[Connection]
+    _cur: Optional[Cursor]
 
     def __init__(self: Self, ip: str, port: int, dbname: str, user: str, password: str) -> None:
-        self._con: Optional[Connection] = None
-        self._cur: Optional[Cursor] = None
+        self._con = None
+        self._cur = None
 
         self._ip: str = ip
         self._pt: int = port
@@ -40,9 +42,9 @@ class Db:
             self._con = psycopg.connect(
                 host=self._ip, port=self._pt,
                 dbname=self._nm,
-                user=self._us, password=self._pw,
-                row_factory=dict_row
+                user=self._us, password=self._pw
             )
+            self._con.row_factory = dict_row # type: ignore
             self._cur = self._con.cursor()
             result = True
         except Exception as e:
@@ -59,8 +61,6 @@ class Db:
         return result
 
     def disconnect(self: Self) -> None:
-        if self._con is None or self._cur is None:
-            return
 
         if self._cur is not None:
             self._cur.close()
@@ -80,8 +80,8 @@ class Db:
         result: TableType = []
 
         try:
-            self._cur.execute(sql)
-            rows: list[dict[str, Any]] = self._cur.fetchall()
+            self._cur.execute(sql) # type: ignore
+            rows: list[dict[str, Any]] = self._cur.fetchall() # type: ignore
             for row in rows:
                 add_record: RecordType = {}
                 for col_name in row.keys():
@@ -101,7 +101,7 @@ class Db:
 
         result: bool = False
         try:
-            self._cur.execute(sql)
+            self._cur.execute(sql)  # type: ignore
             result = True
 
         except Exception as e:
