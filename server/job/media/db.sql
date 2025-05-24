@@ -39,12 +39,12 @@ create table mda_rec (
 
     title   text      not null,
 
-    release date      not null,
+    release date      null,
     own     boolean   not null default false,
 
     code    text      not null default '',
     note    text      not null default '',
-    
+
     udate   TIMESTAMP default CURRENT_TIMESTAMP,
     delflg  boolean   not null default false,
 

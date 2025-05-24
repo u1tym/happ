@@ -80,7 +80,6 @@ class Db:
         try:
             self._cur.execute(sql) # type: ignore
             rows: list[dict[str, Any]] = self._cur.fetchall() # type: ignore
-            print(rows)
             result = []
             for row in rows:
                 add_record: RecordType = {}

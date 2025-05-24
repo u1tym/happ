@@ -9,6 +9,58 @@ from media import Media
 def main():
     test1()
 
+def test4():
+    media = Media()
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"妖精夜行", "release_date":"2024/10/1", "own":True, "code":"PRCL-10256-7", "note":""})
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"ぐだふわエブリデー", "release_date":"2021/4/7", "own":False, "code":"COZC-1728-9", "note":""})
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"Unbreakable", "release_date":"2020/1/15", "own":True, "code":"COZC-1609-10", "note":""})
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"帰る場所があるということ", "release_date":"2018/4/25", "own":True, "code":"COZC-1432-3", "note":""})
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"永遠ラビリンス", "release_date":"2017/11/1", "own":True, "code":"COZC-1383-4", "note":""})
+    media.regist({"pname":"悠木碧", "mname":"CD", "title":"ボイスサンプル", "release_date":"2019/6/12", "own":True, "code":"COZX-1549-50", "note":""})
+
+def test3():
+    media = Media()
+
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase MUSIC CLIP BOX 2",                   "release_date":"2025/06/18", "own":False, "code":"KIXM-627", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase MUSIC CLIP BOX",                     "release_date":"2019.06.26", "own":False, "code":"KIXM-379", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR HELLO HORIZON",            "release_date":"2022.02.23", "own":False, "code":"KIXM-493", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase 5th ANNIVERSARY LIVE Starry Wishes", "release_date":"2021.03.24", "own":False, "code":"KIXM-449", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR Catch the Rainbow!",       "release_date":"2019.10.23", "own":False, "code":"KIXM-398", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR heart bookmark",           "release_date":"2025.03.12", "own":False, "code":"KIXM-618～9", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR SCRAP ART",                "release_date":"2024.03.06", "own":False, "code":"KIXM-578〜9", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR glow",                     "release_date":"2023.04.19", "own":False, "code":"KIXM-536", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase LIVE TOUR BLUE COMPASS",             "release_date":"2018.10.17", "own":False, "code":"KIXM-340", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"BD", "title":"Inori Minase 1st LIVE Ready Steady Go!",          "release_date":"2018.04.04", "own":False, "code":"KIXM-315", "note":""})
+
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"スクラップアート", "release_date":"2023.09.13", "own":False, "code":"KICM-2138", "note":"12th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"アイオライト",     "release_date":"2023.04.19", "own":False, "code":"KICM-2128", "note":"11th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"配信", "title":"REAL-EYES",     "release_date":"2022.01.09", "own":False, "code":"", "note":""})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"HELLO HORIZON",     "release_date":"2021.07.21", "own":False, "code":"KICM-2092", "note":"10th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"Starlight Museum",     "release_date":"2020.12.02", "own":False, "code":"KICM-2065", "note":"9th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"ココロソマリ",     "release_date":"2020.02.05", "own":False, "code":"KICM-2029", "note":"8th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"Wonder Caravan!",     "release_date":"2019.01.23", "own":False, "code":"KICM-1914", "note":"7th Single"})
+    media.regist({"pname":"水瀬いのり", "mname":"CD", "title":"TRUST IN ETERNITY!",     "release_date":"2018.10.17", "own":False, "code":"KICM-1890", "note":"6th Single"})
+
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(1)",  "release_date":"2021.04.24", "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(2)",  "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(3)",  "release_date":"",           "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(4)",  "release_date":"",           "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(5)",  "release_date":"",           "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(6)",  "release_date":"",           "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(7)",  "release_date":"",           "own":True,  "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(8)",  "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(9)",  "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(10)", "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(11)", "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(12)", "release_date":"",           "own":False, "code":"", "note":""})
+    media.regist({"pname":"福田晋一", "mname":"COMIC", "title":"その着せ替え人形は恋をする(13)", "release_date":"",           "own":False, "code":"", "note":""})
+
+
+def test2():
+    media = Media()
+
+    res = media.select_person()
+    print(res)
 
 def test1():
     media = Media()

@@ -20,13 +20,21 @@ from typing import Self
 from typing import cast
 
 class MediaRecord(TypedDict):
-  pname: str
-  mname: str
-  title: str
-  release_date: str
-  own: bool
-  code: str
-  note: str
+    pname: str
+    mname: str
+    title: str
+    release_date: str
+    own: bool
+    code: str
+    note: str
+
+class PRecord(TypedDict):
+    pid: str
+    pname: str
+
+class MRecord(TypedDict):
+    mid: str
+    mname: str
 
 class Media:
     _db: Optional[Db] = None
@@ -60,6 +68,38 @@ class Media:
             self._lg.output("ERR", "処理異常")
             self._lg.output("ERR", self.last_error)
 
+    def select_person(self: Self) -> Union[Literal[False], list[PRecord]]:
+        if self._db is None:
+            return False
+        result: list[PRecord] = []
+
+        rows = self._db.fetchall("select pid, pname from person")
+        if rows != False:
+            for row in rows:
+                row = cast(dict[str, str], row)
+                result.append({
+                    "pid": row["pid"],
+                    "pname": row["pname"]
+                    })
+
+        return result
+
+
+    def select_media(self: Self) -> Union[Literal[False], list[MRecord]]:
+        if self._db is None:
+            return False
+        result: list[MRecord] = []
+
+        rows = self._db.fetchall("select mid, mname from media")
+        if rows != False:
+            for row in rows:
+                row = cast(dict[str, str], row)
+                result.append({
+                    "mid": row["mid"],
+                    "mname": row["mname"]
+                })
+                
+        return result
 
     def regist(self: Self, record: MediaRecord) -> bool:
         """
@@ -84,7 +124,7 @@ class Media:
             self._db.commit()
             return True
         
-        res_rec = self._ins_mda_rec(res_p, res_m, record["title"], record["release_date"], record["own"])
+        res_rec = self._ins_mda_rec(res_p, res_m, record["code"], record["title"], record["note"], record["release_date"], record["own"])
         if res_rec == False:
             return False
         
@@ -357,19 +397,28 @@ class Media:
         return False
 
 
-    def _ins_mda_rec(self: Self, pid: str, mid: str, title: str, release: str, own: bool) -> Union[Literal[False], str]:
+    def _ins_mda_rec(
+            self: Self,
+            pid: str, mid: str,
+            code: str,
+            title: str,
+            note: str,
+            release: str,
+            own: bool) -> Union[Literal[False], str]:
 
         if self._db is None:
             self._lg.output("ERR", "DB未接続")
             return False
 
         sql: str = (
-            "insert into mda_rec (rid, pid, mid, title, release, own) values ( "
+            "insert into mda_rec (rid, pid, mid, title, release, code, note, own) values ( "
             "(select 'R' || LPAD((coalesce(max(substring(rid from 2)::integer), 0) + 1)::text, 7, '0') from mda_rec), "
             + "'" + pid + "', "
             + "'" + mid + "', "
             + "'" + title + "', "
-            + "'" + release + "', "
+            + ("null" if release == "" else "'" + release + "'") + ", "
+            + "'" + code + "', "
+            + "'" + note + "', "
             + str(own) + " "
             + ") returning rid"
         )
