@@ -1,6 +1,8 @@
 {
     "python.analysis.extraPaths": [
-        "./server/lib"
+        "./server/lib",
+        "./server/job/media",
+        "./server/job/amount"
     ],
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "strict"

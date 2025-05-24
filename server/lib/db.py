@@ -77,11 +77,12 @@ class Db:
         if self._cur is None:
             return False
 
-        result: TableType = []
+        result: Union[Literal[False], TableType] = False
 
         try:
             self._cur.execute(sql) # type: ignore
             rows: list[dict[str, Any]] = self._cur.fetchall() # type: ignore
+            result = []
             for row in rows:
                 add_record: RecordType = {}
                 for col_name in row.keys():
@@ -101,7 +102,7 @@ class Db:
 
         result: bool = False
         try:
-            self._cur.execute(sql)  # type: ignore
+            self._cur.execute(sql) # type: ignore
             result = True
 
         except Exception as e:
