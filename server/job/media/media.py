@@ -85,6 +85,33 @@ class Media:
         return result
 
 
+    def select_person2(self: Self, mid: str) -> Union[Literal[False], list[PRecord]]:
+        if self._db is None:
+            return False
+        result: list[PRecord] = []
+
+        sql: str = (
+            "select p.pid as pid, p.pname as pname"
+            + " from person as p"
+            + " inner join mda_rec as r"
+            + " on r.pid = p.pid"
+            + " and r.mid = '" + mid + "'"
+            + " group by p.pid, p.pname"
+            + " order by p.pid"
+        )
+
+        rows = self._db.fetchall(sql)
+        if rows != False:
+            for row in rows:
+                row = cast(dict[str, str], row)
+                result.append({
+                    "pid": row["pid"],
+                    "pname": row["pname"]
+                    })
+
+        return result             
+
+
     def select_media(self: Self) -> Union[Literal[False], list[MRecord]]:
         if self._db is None:
             return False
@@ -100,6 +127,34 @@ class Media:
                 })
 
         return result
+
+    def select_media2(self: Self, pid: str) -> Union[Literal[False], list[MRecord]]:
+        if self._db is None:
+            return False
+        
+        sql: str = (
+            "select m.mid as mid, m.mname as mname"
+            + " from media as m"
+            + " inner join mda_rec as r"
+            + " on r.mid = m.mid"
+            + " and r.pid = '" + pid + "'"
+            + " group by m.mid, m.mname"
+            + " order by m.mid"
+        )
+
+        result: list[MRecord] = []
+
+        rows = self._db.fetchall(sql)
+        if rows != False:
+            for row in rows:
+                row = cast(dict[str, str], row)
+                result.append({
+                    "mid": row["mid"],
+                    "mname": row["mname"]
+                })
+
+        return result
+
 
     def regist(self: Self, record: MediaRecord) -> bool:
         """

@@ -7,7 +7,19 @@ warnings.filterwarnings('ignore')
 from media import Media
 
 def main():
-    test1()
+    test6()
+
+
+def test6():
+    media = Media()
+    res = media.select_person2("M0000002")
+    print(res)
+
+
+def test5():
+    media = Media()
+    res = media.select_media2("P0000002")
+    print(res)
 
 def test4():
     media = Media()
