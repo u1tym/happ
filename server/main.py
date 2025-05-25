@@ -24,6 +24,14 @@ class PersonSelector(TypedDict):
     pid: str
     pname: str
 
+class MediaItem(TypedDict):
+    rid: str
+    media: MediaSelector
+    person: PersonSelector
+    title: str
+    release: str
+    own: bool
+
 class Selector(TypedDict):
     media: list[MediaSelector]
     person: list[PersonSelector]
@@ -58,6 +66,10 @@ class ReqMediaSelector(BaseModel):
 class ReqPersonSelector(BaseModel):
     mid: str
 
+class ReqMediaItem(BaseModel):
+    mid: str
+    pid: str
+
 @app.post("/api/media/media_selector")
 def media_selector(req: ReqMediaSelector):
     db = Media()
@@ -79,3 +91,25 @@ def person_selector(req: ReqPersonSelector):
         p = db.select_person2(req.mid)
     p = cast(list[PersonSelector], p)
     return {"person": p}
+
+@app.post("/api/media/media_item")
+def media_item(req: ReqMediaItem):
+    db = Media()
+
+    res: list[MediaItem] = []
+    itm = db.select_item(req.mid, req.pid)
+    if itm == False:
+        pass
+    else:
+        for one in itm:
+            add_one: MediaItem = {
+                "rid": one["rid"],
+                "media": one["media"],
+                "person": one["person"],
+                "own": one["own"],
+                "release": one["release"],
+                "title": one["title"]
+            }
+            res.append(add_one)
+
+    return {"item": res}

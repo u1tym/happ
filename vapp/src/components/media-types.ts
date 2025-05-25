@@ -14,9 +14,12 @@ export type SelectorList = {
 }
 
 export type MediaType = {
+    rid: string
     media: string
     person: string
     title: string
     release: string
+    own: boolean
+    note: string
 }
 

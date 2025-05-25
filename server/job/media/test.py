@@ -7,8 +7,13 @@ warnings.filterwarnings('ignore')
 from media import Media
 
 def main():
-    test6()
+    test7()
 
+
+def test7():
+    media = Media()
+    res = media.select_item("M0000001", "P0000001")
+    print(res)
 
 def test6():
     media = Media()

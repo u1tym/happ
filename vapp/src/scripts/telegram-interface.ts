@@ -15,3 +15,15 @@ export type IFMediaSelectList = {
 export type IFPersonSelectList = {
     person: Array<IFPersonItem>
 }
+
+export type IFItemItem = {
+    rid: string
+    media: IFMediaItem
+    person: IFPersonItem
+    title: string
+    release: string
+    own: boolean
+}
+export type IFItem = {
+    item: Array<IFItemItem>
+}

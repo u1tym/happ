@@ -1,13 +1,13 @@
 <template>
     <div class="selector-all">
-        <div>
-            <select name="media">
-                <option v-for="r in mediaList" :key="r.mid" value="r.pid">{{ r.media }}</option>
+        <div class="selector-media">
+            <select name="media" v-model="mediaValue" class="select-common">
+                <option v-for="r in mediaList" :key="r.mid" :value="r.mid">{{ r.media }}</option>
             </select>
         </div>
-        <div>
-            <select name="person">
-                <option v-for="r in personList" :key="r.pid" value="r.pid">{{ r.person }}</option>
+        <div class="selector-person">
+            <select name="person" v-model="personValue" class="select-common">
+                <option v-for="r in personList" :key="r.pid" :value="r.pid">{{ r.person }}</option>
             </select>
         </div>
     </div>
@@ -17,6 +17,16 @@
 .selector-all {
     display: flex;
     flex-direction: row;
+    width: 100%;
+}
+.selector-media {
+    width: 40%;
+}
+.selector-person {
+    width: 60%;
+}
+.select-common {
+    width: 100%;
 }
 </style>
 
@@ -25,12 +35,13 @@ import { onMounted, watch } from "vue"
 import { type Ref, ref } from "vue"
 
 import type { MediaItem, PersonItem } from "./media-types";
-import type { SelectorList } from './media-types';
 
 const props = defineProps({
     media: Object as () => Array<MediaItem>,
     person: Object as () => Array<PersonItem>
 })
+
+const emits = defineEmits(['select_media', 'select_person'])
 
 const makeMediaList = (f: Array<MediaItem>): Array<MediaItem> => {
     let ml: Array<MediaItem> = []
@@ -58,12 +69,13 @@ const makePersonList = (f: Array<PersonItem>): Array<PersonItem> => {
     }
     return ml
 }
+
 const mediaList: Ref<Array<MediaItem>> = ref(props.media ? makeMediaList(props.media) : [])
 const personList: Ref<Array<PersonItem>> = ref(props.person ? makePersonList(props.person) : [])
+const mediaValue: Ref<string> = ref("")
+const personValue: Ref<string> = ref("")
 
-console.log("setup MediaSelector")
 onMounted(() => {
-    console.log("onMounted MediaSelector")
     watch(
         () => props.media,
         () => {
@@ -78,5 +90,22 @@ onMounted(() => {
             personList.value = props.person ? makePersonList(props.person) : []
         }
     )
+
+    watch(
+        mediaValue,
+        () => {
+            //console.log("Media変更 [" + mediaValue.value + "]")
+            emits('select_media', mediaValue.value)
+        }
+    )
+
+    watch(
+        personValue,
+        () => {
+            //console.log("Person変更 [" + personValue.value + "]")
+            emits('select_person', personValue.value)
+        }
+    )
+
 })
 </script>

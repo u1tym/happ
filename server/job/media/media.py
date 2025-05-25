@@ -36,6 +36,14 @@ class MRecord(TypedDict):
     mid: str
     mname: str
 
+class IRecord(TypedDict):
+    rid: str
+    person: PRecord
+    media: MRecord
+    title: str
+    release: str
+    own: bool
+
 class Media:
     _db: Optional[Db] = None
     _lg: Log
@@ -153,6 +161,54 @@ class Media:
                     "mname": row["mname"]
                 })
 
+        return result
+
+
+    def select_item(self: Self, mid: str, pid: str):
+        if self._db is None:
+            self._lg.output("ERR", "DB未接続")
+            return False        
+        
+        sql: str = (
+            "select"
+            + " r.rid as rid,"
+            + " r.pid as pid, p.pname as person,"
+            + " r.mid as mid, m.mname as media,"
+            + " r.title as title, r.release as release, r.own as own"
+            + " from mda_rec as r"
+            + " inner join media as m"
+            + " on m.mid = r.mid"
+            + " and m.mid = '" + mid + "'"
+            + " inner join person as p"
+            + " on p.pid = r.pid"
+            + " and p.pid = '" + pid + "'"
+            + " where r.delflg = False"
+            + " order by r.release, r.title"
+        )
+        self._lg.output("DBG", sql)
+
+        result: list[IRecord] = []
+
+        rows = self._db.fetchall(sql)
+        if rows != False:
+            for row in rows:
+                row = cast(dict[str, str], row)
+                add_res: IRecord = {
+                    "rid": row["rid"],
+                    "person": {
+                        "pid": row["pid"],
+                        "pname": row["person"],
+                    },
+                    "media": {
+                        "mid": row["mid"],
+                        "mname": row["media"],
+                    },
+                    "own": cast(bool, row["own"]),
+                    "release": row["release"],
+                    "title": row["title"],
+                }
+                result.append(add_res)
+        
         return result
 
 
