@@ -1,33 +1,36 @@
 <template>
     <div class="edit-all">
         <table>
-            <tr>
-                <td>media</td>
-                <td><input type="text" :value="item.media"></input></td>
-            </tr>
-            <tr>
-                <td>person</td>
-                <td><input type="text" :value="item.person"></input></td>
-            </tr>
-            <tr>
-                <td>title</td>
-                <td><input type="text" :value="item.title"></input></td>
-            </tr>
-            <tr>
-                <td>release</td>
-                <td><input type="text" :value="item.release"></input></td>
-            </tr>
-            <tr>
-                <td>own</td>
-                <td><input type="checkbox" :checked="item.own"></input></td>
-            </tr>
-            <tr>
-                <td>note</td>
-                <td></td>
-            </tr>
-        </table>
+            <tbody>
+
+                <tr>
+                    <td>media</td>
+                    <td><input type="text" v-model="media"></input></td>
+                </tr>
+                <tr>
+                    <td>person</td>
+                    <td><input type="text" v-model="person"></input></td>
+                </tr>
+                <tr>
+                    <td>title</td>
+                    <td><input type="text" v-model="title"></input></td>
+                </tr>
+                <tr>
+                    <td>release</td>
+                    <td><input type="text" v-model="release"></input></td>
+                </tr>
+                <tr>
+                    <td>own</td>
+                    <td><input type="checkbox" v-model="own"></input></td>
+                </tr>
+                <tr>
+                    <td>note</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
         <div class="edit-buttons">
-            <input type="button" value="save"></input>
+            <input type="button" value="save" @click="doSave"></input>
             <input type="button" value="return" @click="doReturn"></input>
         </div>
     </div>
@@ -49,6 +52,8 @@
 import { onMounted, watch } from "vue";
 import { type Ref, ref } from "vue"
 import type { MediaType } from './components/media-types';
+import { Telegram } from "./scripts/telegram-common"
+import type { IFUpdItem } from "./scripts/telegram-interface"
 
 const props = defineProps({
     record: Object as () => MediaType
@@ -56,30 +61,40 @@ const props = defineProps({
 
 const emits = defineEmits(['fin'])
 
-const makeItem = (v: MediaType | undefined): MediaType => {
-    let r: MediaType = {
-        "rid": "",
-        "media": "",
-        "person": "",
-        "title": "",
-        "release": "",
-        "own": false,
-        "note": ""
+const makeMedia = (v: MediaType | undefined): string => { return v ? v.media : "" }
+const makePerson = (v: MediaType | undefined): string => { return v ? v.person : "" }
+const makeTitle = (v: MediaType | undefined): string => { return v ? v.title : "" }
+const makeOwn = (v: MediaType | undefined) : boolean => { return v ? v.own : false }
+const makeRelease = (v: MediaType | undefined): string => { return v ? v.release : "" }
+
+let rid: string = props.record ? props.record.rid : ""
+const media: Ref<string> = ref(props.record ? makeMedia(props.record) : makeMedia(undefined))
+const person: Ref<string> = ref(props.record ? makePerson(props.record) : makePerson(undefined))
+const title: Ref<string> = ref(props.record ? makeTitle(props.record) : makeTitle(undefined))
+const own: Ref<boolean> = ref(props.record ? makeOwn(props.record) : makeOwn(undefined))
+const release: Ref<string> = ref(props.record ? makeRelease(props.record) : makeRelease(undefined))
+
+const doSave = () => {
+    let prm: IFUpdItem = {
+        "rid": rid,
+        "media": media.value,
+        "person": person.value,
+        "own": own.value,
+        "release": release.value ?? "",
+        "title": title.value ?? "",
     }
-    if (v === undefined) {
-        console.log("v is undefined")
-    } else {
-        r.rid = v.rid
-        r.media = v.media
-        r.person = v.person
-        r.title = v.title
-        r.release = v.release
-        r.own = r.own
-        r.note = r.note
-    }
-    return r
+
+    console.log(prm)
+
+    Telegram.post(
+        "http://127.0.0.1:8000/api/media/update_item",
+        JSON.stringify(prm),
+        reply_UpdateItem, null)
 }
-const item: Ref<MediaType> = ref(props.record ? makeItem(props.record) : makeItem(undefined))
+
+const reply_UpdateItem = (v: string) => {
+    emits('fin')
+}
 
 const doReturn = () => {
     emits('fin')
@@ -89,8 +104,16 @@ onMounted(() => {
     watch(
         () => props.record,
         () => {
-            item.value = props.record ? makeItem(props.record) : makeItem(undefined)
+            rid = props.record ? props.record.rid : ""
+            media.value = props.record ? makeMedia(props.record) : makeMedia(undefined)
+            person.value = props.record ? makePerson(props.record) : makePerson(undefined)
+            title.value = props.record ? makeTitle(props.record) : makeTitle(undefined)
+            own.value = props.record ? makeOwn(props.record) : makeOwn(undefined)
+            release.value = props.record ? makeRelease(props.record) : makeRelease(undefined)
         }
     )
+
+    watch(title, () => { console.log("更新 title " + title.value) })
+
 })
 </script>

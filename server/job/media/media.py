@@ -19,27 +19,34 @@ from typing import Literal
 from typing import Self
 from typing import cast
 
+
 class MediaRecord(TypedDict):
     pname: str
     mname: str
     title: str
-    release_date: str
+    release: str
     own: bool
     code: str
     note: str
 
-class PRecord(TypedDict):
+
+# === DB(内部) ===
+
+# Person
+class EntPRecord(TypedDict):
     pid: str
     pname: str
 
-class MRecord(TypedDict):
+# Media
+class EntMRecord(TypedDict):
     mid: str
     mname: str
 
+# Item
 class IRecord(TypedDict):
     rid: str
-    person: PRecord
-    media: MRecord
+    person: EntPRecord
+    media: EntMRecord
     title: str
     release: str
     own: bool
@@ -76,10 +83,14 @@ class Media:
             self._lg.output("ERR", "処理異常")
             self._lg.output("ERR", self.last_error)
 
-    def select_person(self: Self) -> Union[Literal[False], list[PRecord]]:
+    def select_person(self: Self) -> Union[Literal[False], list[EntPRecord]]:
+        """
+        note:
+            personの一覧 を取得する
+        """
         if self._db is None:
             return False
-        result: list[PRecord] = []
+        result: list[EntPRecord] = []
 
         rows = self._db.fetchall("select pid, pname from person")
         if rows != False:
@@ -93,10 +104,14 @@ class Media:
         return result
 
 
-    def select_person2(self: Self, mid: str) -> Union[Literal[False], list[PRecord]]:
+    def select_person2(self: Self, mid: str) -> Union[Literal[False], list[EntPRecord]]:
+        """
+        note:
+            指定した mid をもつ personの一覧 を取得する
+        """
         if self._db is None:
             return False
-        result: list[PRecord] = []
+        result: list[EntPRecord] = []
 
         sql: str = (
             "select p.pid as pid, p.pname as pname"
@@ -120,10 +135,14 @@ class Media:
         return result             
 
 
-    def select_media(self: Self) -> Union[Literal[False], list[MRecord]]:
+    def select_media(self: Self) -> Union[Literal[False], list[EntMRecord]]:
+        """
+        note:
+            mediaの一覧 を取得する
+        """
         if self._db is None:
             return False
-        result: list[MRecord] = []
+        result: list[EntMRecord] = []
 
         rows = self._db.fetchall("select mid, mname from media")
         if rows != False:
@@ -136,7 +155,11 @@ class Media:
 
         return result
 
-    def select_media2(self: Self, pid: str) -> Union[Literal[False], list[MRecord]]:
+    def select_media2(self: Self, pid: str) -> Union[Literal[False], list[EntMRecord]]:
+        """
+        note:
+            指定した pid をもつ mediaの一覧 を取得する
+        """
         if self._db is None:
             return False
         
@@ -150,7 +173,7 @@ class Media:
             + " order by m.mid"
         )
 
-        result: list[MRecord] = []
+        result: list[EntMRecord] = []
 
         rows = self._db.fetchall(sql)
         if rows != False:
@@ -235,7 +258,7 @@ class Media:
             self._db.commit()
             return True
 
-        res_rec = self._ins_mda_rec(res_p, res_m, record["code"], record["title"], record["note"], record["release_date"], record["own"])
+        res_rec = self._ins_mda_rec(res_p, res_m, record["code"], record["title"], record["note"], record["release"], record["own"])
         if res_rec == False:
             return False
 
@@ -248,7 +271,32 @@ class Media:
         """
         更新処理
         """
-        return False
+
+        if rid == "":
+            return self.regist(record)
+
+        if self._db is None:
+            self._lg.output("ERR", "DB未接続")
+            return False
+        
+        res_p = self._regist_person(record["pname"])
+        if res_p == False:
+            self._lg.output("ERR", "person登録処理異常")
+            return False
+        
+        res_m = self._regist_media(record["mname"])
+        if res_m == False:
+            self._lg.output("ERR", "media登録処理異常")
+            return False
+        
+        res_u = self._upd_mda_rec(rid, res_p, res_m, record["code"], record["title"], record["note"], record["release"], record["own"])
+        if res_u == False:
+            self._lg.output("ERR", "mda_rec更新処理異常")
+            return False
+        
+        self._db.commit()
+
+        return True
 
 
 
@@ -548,4 +596,49 @@ class Media:
 
         result: str = row[0]["rid"]
         self._lg.output("DBG", "登録完了 [" + result + "]")
+        return result
+
+    def _upd_mda_rec(
+            self: Self,
+            rid: str,
+            pid: str, mid: str,
+            code: str,
+            title: str,
+            note: str,
+            release: str,
+            own: bool) -> Union[Literal[False], str]:
+
+        if self._db is None:
+            self._lg.output("ERR", "DB未接続")
+            return False
+
+        sql: str = (
+            "update mda_rec"
+            + " set "
+            + " pid = '" + pid + "'"
+            + ", mid = '" + mid + "'"
+            + ", title = '" + title + "'"
+            + ", release = " + ("null" if release == "" else "'" + release + "'")
+            + ", code = '" + code + "'"
+            + ", note = '" + note + "'"
+            + ", own = " + str(own)
+            + ", udate = now()"
+            + " where rid = '" + rid + "'"
+            + " returning rid"
+        )
+        self._lg.output("DBG", sql)
+
+        res = self._db.fetchall(sql)
+        if res == False:
+            self._lg.output("ERR", "fetchall()処理異常")
+            self._lg.output("ERR", self._db.last_error)
+            return False
+
+        row = cast(list[dict[str, str]], res)
+        if len(row) != 1:
+            self._lg.output("ERR", "処理異常 件数=[" + str(len(row)) + "]")
+            return False
+
+        result: str = row[0]["rid"]
+        self._lg.output("DBG", "更新完了 [" + result + "]")
         return result

@@ -60,18 +60,31 @@ def read_root() -> Selector:
     }
     return result
 
-class ReqMediaSelector(BaseModel):
+# IF media一覧取得要求
+class IFReqMediaSelector(BaseModel):
     pid: str
 
-class ReqPersonSelector(BaseModel):
+# IF person一覧取得要求
+class IFReqPersonSelector(BaseModel):
     mid: str
 
-class ReqMediaItem(BaseModel):
+# IF item一覧取得要求
+class IFReqMediaItem(BaseModel):
     mid: str
     pid: str
+
+# IF item更新要求
+class IFUpdItem(BaseModel):
+    rid: str
+    media: str
+    person: str
+    own: bool
+    release: str
+    title: str
+
 
 @app.post("/api/media/media_selector")
-def media_selector(req: ReqMediaSelector):
+def media_selector(req: IFReqMediaSelector):
     db = Media()
 
     if req.pid == "":
@@ -82,7 +95,7 @@ def media_selector(req: ReqMediaSelector):
     return {"media": m}
 
 @app.post("/api/media/person_selector")
-def person_selector(req: ReqPersonSelector):
+def person_selector(req: IFReqPersonSelector):
     db = Media()
 
     if req.mid == "":
@@ -92,8 +105,8 @@ def person_selector(req: ReqPersonSelector):
     p = cast(list[PersonSelector], p)
     return {"person": p}
 
-@app.post("/api/media/media_item")
-def media_item(req: ReqMediaItem):
+@app.post("/api/media/select_item")
+def select_item(req: IFReqMediaItem):
     db = Media()
 
     res: list[MediaItem] = []
@@ -113,3 +126,23 @@ def media_item(req: ReqMediaItem):
             res.append(add_one)
 
     return {"item": res}
+
+@app.post("/api/media/update_item")
+def update_item(req: IFUpdItem):
+    print("update!!!")
+    db = Media()
+
+    res = db.update(
+        req.rid,
+        {
+            "mname": req.media,
+            "pname": req.person,
+            "code": "",
+            "title": req.title,
+            "release": req.release,
+            "own": req.own,
+            "note": ""
+        } )
+    print(res)
+
+    return {"result": res}

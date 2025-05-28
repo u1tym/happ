@@ -153,7 +153,7 @@ const reqMediaItem = (mid: string, pid: string) => {
         "pid": pid,
     }
     Telegram.post(
-        "http://127.0.0.1:8000/api/media/media_item",
+        "http://127.0.0.1:8000/api/media/select_item",
         JSON.stringify(prm),
         replyMediaItem, null)
 }
@@ -225,6 +225,33 @@ const selectPerson = (pid: string) => {
 
 const doAdd = () => {
     console.log("ADD")
+
+    let media = ""
+    mediaList.value.forEach((one) => {
+        if(one.mid == selectMid) {
+            media = one.media
+            return
+        }
+    })
+    let person = ""
+    personList.value.forEach((one) => {
+        if(one.pid == selectPid) {
+            person = one.person
+            return
+        }
+    })
+
+    let mi: MediaType = {
+        "rid": "",
+        "media": media,
+        "person": person,
+        "title": "",
+        "release": "",
+        "note": "",
+        "own": false
+    }
+    editItem.value = mi
+    mode.value = "edit"
 }
 
 const doEdit = (rid: string) => {
@@ -255,6 +282,7 @@ const doEdit = (rid: string) => {
 
 const doEditFin = () => {
     mode.value = "list"
+    reqMediaItem(selectMid, selectPid)
 }
 
 onMounted(() => {

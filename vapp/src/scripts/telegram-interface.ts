@@ -27,3 +27,12 @@ export type IFItemItem = {
 export type IFItem = {
     item: Array<IFItemItem>
 }
+
+export type IFUpdItem = {
+    rid: string
+    media: string
+    person: string
+    title: string
+    release: string
+    own: boolean
+}
