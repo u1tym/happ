@@ -87,7 +87,8 @@ const reqMediaSelectList = (pid: string) => {
         "pid": pid
     }
     Telegram.post(
-        "http://127.0.0.1:8000/api/media/media_selector",
+        "http://192.168.0.250:8000/api/media/media_selector",
+        //"http://127.0.0.1:8000/api/media/media_selector",
         JSON.stringify(prm),
         replyreqMediaSelectList, null)
 }
@@ -121,7 +122,9 @@ const reqPersonSelectList = (mid: string) => {
     let prm = {
         "mid": mid
     }
-    Telegram.post("http://127.0.0.1:8000/api/media/person_selector",
+    Telegram.post(
+	"http://192.168.0.250:8000/api/media/person_selector",
+	//"http://127.0.0.1:8000/api/media/person_selector",
         JSON.stringify(prm),
         replyPersonSelectList, null)
 }
@@ -153,7 +156,8 @@ const reqMediaItem = (mid: string, pid: string) => {
         "pid": pid,
     }
     Telegram.post(
-        "http://127.0.0.1:8000/api/media/select_item",
+        "http://192.168.0.250:8000/api/media/select_item",
+        //"http://127.0.0.1:8000/api/media/select_item",
         JSON.stringify(prm),
         replyMediaItem, null)
 }

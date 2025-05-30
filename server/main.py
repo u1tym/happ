@@ -36,11 +36,13 @@ class Selector(TypedDict):
     media: list[MediaSelector]
     person: list[PersonSelector]
 
+server_ip = "192.168.0.250"
 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # 許可するオリジン
+    #allow_origins=["http://localhost:5173"],  # 許可するオリジン
+    allow_origins=["http://" + server_ip + ":5173"],  # 許可するオリジン
     allow_credentials=True,
     allow_methods=["*"],  # 許可するHTTPメソッド (GET, POSTなど)
     allow_headers=["*"],  # 許可するヘッダー
@@ -48,6 +50,7 @@ app.add_middleware(
 
 @app.get("/api/media/selector")
 def read_root() -> Selector:
+    print("selector")
     db = Media()
     m = db.select_media()
     p = db.select_person()
