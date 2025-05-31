@@ -95,6 +95,7 @@ const doDelete = () => {
 }
 
 const reply_DeleteItem = (v: string) => {
+    console.log(v)
     emits('fin')
 }
 
@@ -117,6 +118,7 @@ const doSave = () => {
 }
 
 const reply_UpdateItem = (v: string) => {
+    console.log(v)
     emits('fin')
 }
 
