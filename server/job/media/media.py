@@ -201,7 +201,7 @@ class Media:
             + " from mda_rec as r"
             + " inner join media as m"
             + " on m.mid = r.mid"
-            + " and m.mid = '" + mid + "'"
+            + ("" if mid == "" else " and m.mid = '" + mid + "'")
             + " inner join person as p"
             + " on p.pid = r.pid"
             + " and p.pid = '" + pid + "'"
@@ -298,6 +298,24 @@ class Media:
 
         return True
 
+
+    def delete(self: Self, rid: str) -> bool:
+        """
+        更新処理
+        """
+
+        if rid == "":
+            return False
+        
+        if self._db is None:
+            self._lg.output("ERR", "DB未接続")
+            return False
+        
+        self._del_mda_rec(rid)
+
+        self._db.commit()
+
+        return True
 
 
     def test_get_pid(self: Self, pname: str) -> Union[Literal[False], None, None, str]:
@@ -642,3 +660,32 @@ class Media:
         result: str = row[0]["rid"]
         self._lg.output("DBG", "更新完了 [" + result + "]")
         return result
+
+    def _del_mda_rec(
+            self: Self,
+            rid: str) -> bool:
+
+        if self._db is None:
+            self._lg.output("ERR", "DB未接続")
+            return False
+        
+        sql: str = (
+            "delete from mda_rec"
+            + " where rid = '" + rid + "'"
+            + " returning rid"
+        )
+        self._lg.output("DBG", sql)
+
+        res = self._db.fetchall(sql)
+        if res == False:
+            self._lg.output("ERR", "fetchall()処理異常")
+            self._lg.output("ERR", self._db.last_error)
+            return False
+
+        row = cast(list[dict[str, str]], res)
+        if len(row) != 1:
+            self._lg.output("ERR", "処理異常 件数=[" + str(len(row)) + "]")
+            return False
+
+        self._lg.output("DBG", "更新完了 [" + str(True) + "]")
+        return True

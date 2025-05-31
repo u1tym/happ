@@ -9,8 +9,9 @@
             ></MediaSelector>
         </div>
         <div class="list" v-show='mode == "list"'>
-            <div v-show='selectMid != "" && selectPid != ""'>
+            <div v-show='selectPid != ""'>
                 <input
+                    class="add-button"
                     type="button"
                     value="ADD NEW RECORD"
                     @click="doAdd"
@@ -20,11 +21,12 @@
                     :key="r.rid"
                     :record="r"
                     @edit="doEdit"></Item>
+                <div style="height:40px;"></div>
             </div>
         </div>
 
         <!-- EDIT -->
-        <div v-show='mode == "edit"'>
+        <div v-if='mode == "edit"'>
             <MediaEdit :record="editItem" @fin="doEditFin"></MediaEdit>
         </div>
     </div>
@@ -34,14 +36,21 @@
 .all {
     width: 100%;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 .selector {
     width: 100%;
-    height: 5%;
+    flex: 1;
+}
+.add-button {
+    font-size: larger;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .list {
     width: 100%;
-    height: 95%;
+    flex: 20;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -196,7 +205,7 @@ const selectMedia = (mid: string) => {
     if(selectPid == "") {
         reqPersonSelectList(mid)
     }
-    if(selectMid != "" && selectPid != "") {
+    if(selectPid != "") {
         reqMediaItem(selectMid, selectPid)
     }
     if(selectMid == "" || selectPid == "") {
@@ -217,9 +226,11 @@ const selectPerson = (pid: string) => {
     if(selectMid == "") {
         reqMediaSelectList(pid)
     }
-    if(selectMid != "" && selectPid != "") {
+
+    if(selectPid != "") {
         reqMediaItem(selectMid, selectPid)
     }
+
     if(selectMid == "" || selectPid == "") {
         items.value = []
     }

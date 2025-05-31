@@ -87,6 +87,10 @@ class IFUpdItem(BaseModel):
     release: str
     title: str
 
+# IF item削除要求
+class IFDelItem(BaseModel):
+    rid: str
+
 
 @app.post("/api/media/media_selector")
 def media_selector(req: IFReqMediaSelector):
@@ -151,3 +155,11 @@ def update_item(req: IFUpdItem):
     print(res)
 
     return {"result": res}
+
+@app.post("/api/media/delete_item")
+def delete_item(req: IFDelItem):
+    db = Media()
+
+    db.delete(req.rid)
+
+    return {"result": True}

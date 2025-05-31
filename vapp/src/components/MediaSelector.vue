@@ -1,13 +1,13 @@
 <template>
     <div class="selector-all">
-        <div class="selector-media">
-            <select name="media" v-model="mediaValue" class="select-common">
-                <option v-for="r in mediaList" :key="r.mid" :value="r.mid">{{ r.media }}</option>
-            </select>
-        </div>
         <div class="selector-person">
             <select name="person" v-model="personValue" class="select-common">
                 <option v-for="r in personList" :key="r.pid" :value="r.pid">{{ r.person }}</option>
+            </select>
+        </div>
+        <div class="selector-media">
+            <select name="media" v-model="mediaValue" class="select-common">
+                <option v-for="r in mediaList" :key="r.mid" :value="r.mid">{{ r.media }}</option>
             </select>
         </div>
     </div>
@@ -27,6 +27,7 @@
 }
 .select-common {
     width: 100%;
+    height: 60px;
 }
 </style>
 
