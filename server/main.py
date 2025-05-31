@@ -36,8 +36,9 @@ class Selector(TypedDict):
     media: list[MediaSelector]
     person: list[PersonSelector]
 
+server_ip = "localhost"
 #server_ip = "192.168.0.250"
-server_ip = "ytym.sytes.net"
+#server_ip = "ytym.sytes.net"
 
 app = FastAPI()
 app.add_middleware(

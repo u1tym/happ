@@ -53,6 +53,7 @@ import { onMounted, watch } from "vue";
 import { type Ref, ref } from "vue"
 import type { MediaType } from './components/media-types';
 import { Telegram } from "./scripts/telegram-common"
+import { Host } from "./scripts/telegram-interface"
 import type { IFUpdItem } from "./scripts/telegram-interface"
 
 const props = defineProps({
@@ -87,7 +88,7 @@ const doSave = () => {
     console.log(prm)
 
     Telegram.post(
-        "http://127.0.0.1:8000/api/media/update_item",
+        Host.urlUpdateItem,
         JSON.stringify(prm),
         reply_UpdateItem, null)
 }

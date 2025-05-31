@@ -57,6 +57,7 @@ import MediaEdit from './MediaEdit.vue'
 
 import type { IFMediaSelectList, IFPersonSelectList, IFItem } from "./scripts/telegram-interface"
 import { Telegram } from "./scripts/telegram-common"
+import { Host } from "./scripts/telegram-interface"
 
 import type { MediaItem, PersonItem } from "./components/media-types"
 import type { MediaType } from './components/media-types'
@@ -87,8 +88,7 @@ const reqMediaSelectList = (pid: string) => {
         "pid": pid
     }
     Telegram.post(
-        "http://ytym.sytes.net:8000/api/media/media_selector",
-        //"http://127.0.0.1:8000/api/media/media_selector",
+        Host.urlSelectMList,
         JSON.stringify(prm),
         replyreqMediaSelectList, null)
 }
@@ -123,8 +123,7 @@ const reqPersonSelectList = (mid: string) => {
         "mid": mid
     }
     Telegram.post(
-	"http://ytym.sytes.net:8000/api/media/person_selector",
-	//"http://127.0.0.1:8000/api/media/person_selector",
+        Host.urlSelectPList,
         JSON.stringify(prm),
         replyPersonSelectList, null)
 }
@@ -156,8 +155,7 @@ const reqMediaItem = (mid: string, pid: string) => {
         "pid": pid,
     }
     Telegram.post(
-        "http://ytym.sytes.net:8000/api/media/select_item",
-        //"http://127.0.0.1:8000/api/media/select_item",
+        Host.urlSelectItem,
         JSON.stringify(prm),
         replyMediaItem, null)
 }
