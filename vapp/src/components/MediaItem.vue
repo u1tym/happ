@@ -3,7 +3,9 @@
         <div class="item-line-1">
             <div class="item-line-1-l">
                 <div class="item-own">
-                    <input type="checkbox" :checked="own" disabled class="item-own"></input>
+                    <div class="check-mark">
+                        {{ checkMark }}
+                    </div>
                 </div>
                 <div class="item-person">{{ person }} [ {{ media }} ]</div>
             </div>
@@ -48,10 +50,24 @@
 .item-title {
     font-size: larger;
 }
+.check-mark {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    border-radius: 4px; /* 角を少し丸く */
+    text-align: center;
+    line-height: 20px;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    margin-right: 4px;
+}
 </style>
 
 <script setup lang="ts">
 import { onMounted, watch } from "vue"
+import { computed } from "vue"
 import { ref, type Ref } from "vue"
 
 import type { MediaType } from "./media-types"
@@ -70,6 +86,9 @@ const clickEdit = () => {
     emits('edit', props.record?.rid)
 }
 
+const checkMark = computed(() => {
+    return own.value ? "✔" : ""
+})
 onMounted(() => {
     watch(
         () => props.record,
