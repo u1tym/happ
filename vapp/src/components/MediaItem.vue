@@ -21,13 +21,16 @@
     width: 99%;
     display: flex;
     flex-direction: column;
-    border: 1px solid #000;
+    border: 1px dotted #000;
+    border-radius: 7px;
 }
 .item-line-1 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .item-line-1-l {
     display: flex;
@@ -36,6 +39,7 @@
 .item-line-2 {
     display: flex;
     flex-direction: row;
+    margin-left: 5px;
 }
 
 .item-own input[type="checkbox"]:disabled {
