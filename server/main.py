@@ -30,6 +30,7 @@ class MediaItem(TypedDict):
     person: PersonSelector
     title: str
     release: str
+    note: str
     own: bool
 
 class Selector(TypedDict):
@@ -86,6 +87,7 @@ class IFUpdItem(BaseModel):
     own: bool
     release: str
     title: str
+    note: str
 
 # IF item削除要求
 class IFDelItem(BaseModel):
@@ -130,7 +132,8 @@ def select_item(req: IFReqMediaItem):
                 "person": one["person"],
                 "own": one["own"],
                 "release": one["release"],
-                "title": one["title"]
+                "title": one["title"],
+                "note": one["note"],
             }
             res.append(add_one)
 
@@ -150,7 +153,7 @@ def update_item(req: IFUpdItem):
             "title": req.title,
             "release": req.release,
             "own": req.own,
-            "note": ""
+            "note": req.note,
         } )
     print(res)
 

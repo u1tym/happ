@@ -43,12 +43,13 @@ class EntMRecord(TypedDict):
     mname: str
 
 # Item
-class IRecord(TypedDict):
+class EntIRecord(TypedDict):
     rid: str
     person: EntPRecord
     media: EntMRecord
     title: str
     release: str
+    note: str
     own: bool
 
 class Media:
@@ -197,7 +198,7 @@ class Media:
             + " r.rid as rid,"
             + " r.pid as pid, p.pname as person,"
             + " r.mid as mid, m.mname as media,"
-            + " r.title as title, r.release as release, r.own as own"
+            + " r.title as title, r.release as release, r.own as own, r.note as note"
             + " from mda_rec as r"
             + " inner join media as m"
             + " on m.mid = r.mid"
@@ -210,13 +211,13 @@ class Media:
         )
         self._lg.output("DBG", sql)
 
-        result: list[IRecord] = []
+        result: list[EntIRecord] = []
 
         rows = self._db.fetchall(sql)
         if rows != False:
             for row in rows:
                 row = cast(dict[str, str], row)
-                add_res: IRecord = {
+                add_res: EntIRecord = {
                     "rid": row["rid"],
                     "person": {
                         "pid": row["pid"],
@@ -229,6 +230,7 @@ class Media:
                     "own": cast(bool, row["own"]),
                     "release": row["release"],
                     "title": row["title"],
+                    "note": row["note"]
                 }
                 result.append(add_res)
         

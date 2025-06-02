@@ -12,8 +12,13 @@
                     <td><input class="input-field" type="text" v-model="person"></input></td>
                 </tr>
                 <tr>
-                    <td>title</td>
+                    <td style="vertical-align: top;">title</td>
+                    <!--
                     <td><input class="input-field" type="text" v-model="title"></input></td>
+                    -->
+                    <td>
+                        <textarea v-model="title" style="width: 95%;"></textarea>
+                    </td>
                 </tr>
                 <tr>
                     <td>release</td>
@@ -24,8 +29,8 @@
                     <td><input type="checkbox" v-model="own"></input></td>
                 </tr>
                 <tr>
-                    <td>note</td>
-                    <td></td>
+                    <td style="vertical-align: top;">note</td>
+                    <td><textarea v-model="note" style="width: 95%; height: 100px;"></textarea></td>
                 </tr>
                 </tbody>
             </table>
@@ -72,6 +77,7 @@ const makePerson = (v: MediaType | undefined): string => { return v ? v.person :
 const makeTitle = (v: MediaType | undefined): string => { return v ? v.title : "" }
 const makeOwn = (v: MediaType | undefined) : boolean => { return v ? v.own : false }
 const makeRelease = (v: MediaType | undefined): string => { return v ? v.release : "" }
+const makeNote = (v: MediaType | undefined): string => { return v ? v.note : "" }
 
 const rid: Ref<string> = ref(props.record ? props.record.rid : "")
 const media: Ref<string> = ref(props.record ? makeMedia(props.record) : makeMedia(undefined))
@@ -79,7 +85,7 @@ const person: Ref<string> = ref(props.record ? makePerson(props.record) : makePe
 const title: Ref<string> = ref(props.record ? makeTitle(props.record) : makeTitle(undefined))
 const own: Ref<boolean> = ref(props.record ? makeOwn(props.record) : makeOwn(undefined))
 const release: Ref<string> = ref(props.record ? makeRelease(props.record) : makeRelease(undefined))
-
+const note: Ref<string> = ref(props.record ? makeNote(props.record) : makeNote(undefined) )
 const checkDelete: Ref<boolean> = ref(false)
 
 const doDelete = () => {
@@ -107,6 +113,7 @@ const doSave = () => {
         "own": own.value,
         "release": release.value ?? "",
         "title": title.value ?? "",
+        "note": note.value ?? "",
     }
 
     console.log(prm)

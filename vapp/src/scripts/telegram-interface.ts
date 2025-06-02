@@ -23,6 +23,7 @@ export type IFItemItem = {
     title: string
     release: string
     own: boolean
+    note: string
 }
 export type IFItem = {
     item: Array<IFItemItem>
@@ -35,6 +36,7 @@ export type IFUpdItem = {
     title: string
     release: string
     own: boolean
+    note: string
 }
 
 export type IFDelItem = {

@@ -20,6 +20,7 @@
                     v-for="r in items"
                     :key="r.rid"
                     :record="r"
+                    :mediaCode="selectMid"
                     @edit="doEdit"></Item>
                 <div style="height:40px;"></div>
             </div>
@@ -183,7 +184,7 @@ const replyMediaItem = (v: string) => {
                 "release": one["release"],
                 "title": one["title"],
                 "own": one["own"],
-                "note": "",
+                "note": one["note"],
             })
         })
         items.value = lst

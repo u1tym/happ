@@ -1,19 +1,28 @@
 <template>
     <div class="item-all">
+
         <div class="item-line-1">
             <div class="item-line-1-l">
-                <div class="item-own">
+
+                <!-- 所持マーク -->
+                <div class="item-own" @click="clickEdit">
                     <div class="check-mark">
                         {{ checkMark }}
                     </div>
                 </div>
-                <div class="item-person">{{ person }} [ {{ media }} ]</div>
+
+                <!-- メディア -->
+                <div class="item-media" v-if="mediaCode == ''">
+                    [ {{ media }} ]
+                </div>
+
+                <!-- タイトル -->
+                <div class="item-title">
+                    <span>{{ title }}</span>
+                </div>
             </div>
-            <input type="button" value="EDIT" @click="clickEdit"></input>
         </div>
-        <div class="item-line-2">
-            
-            <div class="item-title">{{ title }}</div>
+        <div class="item-line-2" v-if="false">
         </div>
     </div>
 </template>
@@ -37,6 +46,7 @@
 .item-line-1-l {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 .item-line-2 {
     display: flex;
@@ -47,9 +57,32 @@
 .item-own input[type="checkbox"]:disabled {
     filter: brightness(0.9) sepia(1) hue-rotate(200deg) saturate(500%);
 }
-.item-title {
-    font-size: larger;
+
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    60% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
+.item-own,
+.item-media {
+    flex: none;
+}
+.item-media {
+    margin-right: 5px;
+}
+.item-title {
+    flex: 1;
+    font-size: larger;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+.item-title span {
+    display: inline-block;
+    /* animation: scrollText 10s linear 2s infinite; */
+}
+
 .check-mark {
     display: inline-block;
     width: 20px;
@@ -73,7 +106,8 @@ import { ref, type Ref } from "vue"
 import type { MediaType } from "./media-types"
 
 const props = defineProps({
-    record: Object as () => MediaType
+    record: Object as () => MediaType,
+    mediaCode: String,
 })
 const emits = defineEmits(['edit'])
 
@@ -82,12 +116,14 @@ const media: Ref<string> = ref(props.record ? props.record.media : "")
 const title: Ref<string> = ref(props.record ? props.record.title : "")
 const own: Ref<boolean> = ref(props.record ? props.record.own : false)
 
+const mediaCode: Ref<string> = ref(props.mediaCode ? props.mediaCode : "")
+
 const clickEdit = () => {
     emits('edit', props.record?.rid)
 }
 
 const checkMark = computed(() => {
-    return own.value ? "✔" : ""
+    return own.value ? "✔" : "　"
 })
 onMounted(() => {
     watch(
@@ -97,6 +133,12 @@ onMounted(() => {
             media.value = props.record ? props.record.media : ""
             title.value = props.record ? props.record.title : ""
             own.value = props.record ? props.record.own : false
+        }
+    )
+    watch(
+        () => props.mediaCode,
+        () => {
+            mediaCode.value = props.mediaCode ? props.mediaCode : ""
         }
     )
 })
