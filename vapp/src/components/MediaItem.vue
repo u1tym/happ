@@ -17,8 +17,8 @@
                 </div>
 
                 <!-- タイトル -->
-                <div class="item-title">
-                    <span>{{ title }}</span>
+                <div class="item-title" ref="titleContainer">
+                    <span ref="titleValue">{{ title }}</span>
                 </div>
             </div>
         </div>

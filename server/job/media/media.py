@@ -70,7 +70,7 @@ class Media:
                 self._lg = Log(0, "media", ".")
 
             # DB接続
-            db = Db("192.168.0.250", 5432, "mdadb", "mdausr", "MEDIAMEDIA")
+            db = Db("127.0.0.1", 5432, "mdadb", "mdausr", "MEDIAMEDIA")
             res = db.connect()
             if res == False:
                 self._lg.output("ERR", "DB接続異常")
@@ -133,7 +133,7 @@ class Media:
                     "pname": row["pname"]
                     })
 
-        return result             
+        return result
 
 
     def select_media(self: Self) -> Union[Literal[False], list[EntMRecord]]:
@@ -163,7 +163,7 @@ class Media:
         """
         if self._db is None:
             return False
-        
+
         sql: str = (
             "select m.mid as mid, m.mname as mname"
             + " from media as m"
@@ -191,8 +191,8 @@ class Media:
     def select_item(self: Self, mid: str, pid: str):
         if self._db is None:
             self._lg.output("ERR", "DB未接続")
-            return False        
-        
+            return False
+
         sql: str = (
             "select"
             + " r.rid as rid,"
@@ -233,7 +233,7 @@ class Media:
                     "note": row["note"]
                 }
                 result.append(add_res)
-        
+
         return result
 
 
@@ -280,22 +280,22 @@ class Media:
         if self._db is None:
             self._lg.output("ERR", "DB未接続")
             return False
-        
+
         res_p = self._regist_person(record["pname"])
         if res_p == False:
             self._lg.output("ERR", "person登録処理異常")
             return False
-        
+
         res_m = self._regist_media(record["mname"])
         if res_m == False:
             self._lg.output("ERR", "media登録処理異常")
             return False
-        
+
         res_u = self._upd_mda_rec(rid, res_p, res_m, record["code"], record["title"], record["note"], record["release"], record["own"])
         if res_u == False:
             self._lg.output("ERR", "mda_rec更新処理異常")
             return False
-        
+
         self._db.commit()
 
         return True
@@ -308,11 +308,11 @@ class Media:
 
         if rid == "":
             return False
-        
+
         if self._db is None:
             self._lg.output("ERR", "DB未接続")
             return False
-        
+
         self._del_mda_rec(rid)
 
         self._db.commit()
@@ -670,7 +670,7 @@ class Media:
         if self._db is None:
             self._lg.output("ERR", "DB未接続")
             return False
-        
+
         sql: str = (
             "delete from mda_rec"
             + " where rid = '" + rid + "'"

@@ -17,3 +17,73 @@ sudo update-alternatives --install /usr/bin/python python /usr/local/bin/python3
 python --version
 
 
+
+
+
+
+<template>
+  <div class="scroll-container" ref="containerRef">
+    <div class="scroll-text" ref="text1Ref">{{ text1 }}</div>
+    <div class="scroll-text" ref="text2Ref">{{ text2 }}</div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, nextTick } from 'vue'
+
+const text1 = 'ABCDEFG'
+const text2 = 'あいうえおかきくけこ'
+
+const containerRef = ref(null)
+const text1Ref = ref(null)
+const text2Ref = ref(null)
+
+let animationFrame
+let scrollPos = 0
+
+const scrollSpeed = 1
+
+const scrollTexts = () => {
+  const container = containerRef.value
+  const text1El = text1Ref.value
+  const text2El = text2Ref.value
+
+  const maxScroll1 = text1El.scrollWidth - container.clientWidth
+  const maxScroll2 = text2El.scrollWidth - container.clientWidth
+
+  const shouldScroll = maxScroll1 > 0 || maxScroll2 > 0
+
+  if (!shouldScroll) return
+
+  scrollPos += scrollSpeed
+  if (scrollPos > Math.max(maxScroll1, maxScroll2)) {
+    scrollPos = 0
+  }
+
+  text1El.style.transform = `translateX(${-scrollPos}px)`
+  text2El.style.transform = `translateX(${-scrollPos}px)`
+
+  animationFrame = requestAnimationFrame(scrollTexts)
+}
+
+onMounted(async () => {
+  await nextTick()
+  scrollTexts()
+})
+</script>
+
+<style scoped>
+.scroll-container {
+  width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+.scroll-text {
+  display: inline-block;
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+</style>
