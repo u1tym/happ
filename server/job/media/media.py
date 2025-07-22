@@ -4,13 +4,13 @@ import warnings
 sys.dont_write_bytecode = True
 warnings.filterwarnings('ignore')
 
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../lib")))
+#import os
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../external/ppsql")))
 
-from db import Db
-from db import TableType
+from ppsqldb import Db
+from ppsqldb import TableType
 
-from log import Log
+from plog import Log
 
 from typing import TypedDict
 from typing import Optional

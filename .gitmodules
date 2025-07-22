@@ -1,0 +1,6 @@
+[submodule "server/external/ppsqldb"]
+	path = server/external/ppsqldb
+	url = https://github.com/u1tym/ppsqldb.git
+[submodule "server/external/plog"]
+	path = server/external/plog
+	url = https://github.com/u1tym/plog.git

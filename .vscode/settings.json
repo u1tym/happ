@@ -1,8 +1,9 @@
 {
     "python.analysis.extraPaths": [
-        "./server/lib",
+        "./server/external/plog",
+        "./server/external/ppsqldb",
         "./server/job/media",
-        "./server/job/amount"
+        "./server/job/amount",
     ],
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "strict"
